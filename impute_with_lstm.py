@@ -8,6 +8,9 @@ The model is trained using an LSTM with masking to account for missing data.
 The model is used to predict the missing data points.
 
 WHY: 
+Time series data sets can have missing data. An LSTM can be used to impute missing values with a prediction. 
+It is better than traditional methods like 1. interpolation, or 2. imputing with a constant (0 or mean) because
+the LSTM can 
 This code imputes and returns the complete data.  
 
 ASSUMES: 
