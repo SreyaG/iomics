@@ -93,7 +93,7 @@ def main():
   y_missing = scaler.inverse_transform(utils.predict_model(model,X_missing))
   df_fin=utils.filled_dataset(df,y_missing,missing_indices,cols)
   print("Imputed missing data")
-  print(df_fin.iloc[missing_indices])
+  print(df_fin.iloc[missing_indices].head())
   
   df_fin.to_csv("impute_household_power_consumption.csv")
 
