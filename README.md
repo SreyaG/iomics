@@ -1,4 +1,10 @@
-# Iomics
+# Iomics Take Home 
+## Usage
+Requirements file is included. 
+Input : python3 impute_with_lstm.py filepath --features 'feature_1,feature_2'
+Output : "impute_household_power_consumption.csv" saved in the working directory with the imputed data points. 
+The imputed data-set has values of the datatype float32 instead of string in the original dataset. 
+
 ## Task Assigned
 1. Identify a well-regarded LSTM implementation and adapt it for re-usability.
 2. Download and prepare the data for use from http://archive.ics.uci.edu/ml/datasets/Individual+household+electric+power+consumption.
@@ -34,4 +40,5 @@ Early stopping was used.
 ## Evaluation
 
 The MSE on the validation set during training is 0.03.
-The MSE on the test set (95014 samples) is . 
+
+
