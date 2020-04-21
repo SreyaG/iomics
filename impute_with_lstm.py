@@ -3,48 +3,75 @@
 
 WHAT: 
 This code imputes missing data using LSTM. 
-The data-set is cleaned and partitioned into training and testing data. 
-The model is trained using an LSTM with masking to account for missing data.
-The model is used to predict the missing data points.
+The data-set is preprocessed, scaled and partitioned into training and testing data. The missing data points are identified.
+The LSTM model is trained with masking to account for missing data.
+The model is then used to predict the missing data points.
 
 WHY: 
-Time series data sets can have missing data. An LSTM can be used to impute missing values with a prediction. 
-It is better than traditional methods like 1. interpolation, or 2. imputing with a constant (0 or mean) because
-the LSTM can predict the missing data based on past information.
-
+Time series datasets can have missing data.
 Long Short-Term Memory (LSTM) networks are a type of recurrent neural network capable of 
 learning order dependence in sequence prediction problems. 
 https://www.bioinf.jku.at/publications/older/2604.pdf
 
-This code imputes and returns the complete data. 
+An LSTM network can be used to impute missing values . It is better than traditional methods like 
+1. interpolation, or 2. imputing with a constant (0 or mean) because the LSTM can predict the missing data based on past 
+information.
+For non-timeseries data generative adversarial networks (GANs) are shown to work better than traditional 
+imputation techniques. 
+
+This code imputes and returns the complete dataset. 
 
 ASSUMES:
-1. The input data is sequential and has uniform timesteps. There is enough data to train LSTM. 
-2. 
-3. The python libray requirements file is included. 
+1. The input data is sequential and has uniform timesteps. 
+2. There is enough data to train LSTM. 
+3. There is missing data in the data-set. 
+
+The python libray requirements file is included. 
 
 FUTURE IMPROVEMENTS: 
 
-The data-set is large and was truncated to 500,000 data points for training on a local computer. 
-Optimization of the data loading can improve the efficiency of the code, and allow training with more data improving the model (typical of NN).
+1. The data-set is large and was truncated to 500,000 data points for training on a local computer. 
+Optimization of the data loading can improve the efficiency of the code, and allow training with more 
+data improving the model (typical of NN).
 
-The choice of parameters in the model was searched over a small grid. Extensive hyper-parameter search. 
-
+2. The choice of parameters in the model was searched over a small grid. Extensive hyper-parameter search will 
+help to find the best hyper-parameters for the given model and data-set. 
 
 VARIABLES: 
 df : Type: DataFrame
-  Dataframe with the entire raw data-set.
+    Dataframe with the entire raw data-set.
 df_model : Type: DataFrame
-  Pandas dataframe with the entire data-set with the selected features only.
+    Pandas dataframe with the entire data-set with the selected features only.
 utils : Library of custom functions to preprocess, train and predict from the LSTM model.
-  Utility functions included. 
+    Utility functions included. 
 scaler: Function from scikitlearn. 
-  Function to scale, and descale the features. The features are scaled between [0,1] to ensure the a smoother gradient
-  descent and hence improved convergence hence an improved model.
+    Function to scale, and descale the features. The features are scaled between [0,1] to ensure the a smoother gradient
+    descent and improved convergence, hence an improved model.
+X_train: type: numpy array(3D)
+    Data to train the model. This is time series data so its not randomly sampled but kept in contiguous.
+y_train: Type: Numpy array(2D)
+    Target vector for training. 
+X_test : Type: Numpy array(3D)
+    Fraction of the data used for testing (prediction).
+y_test : Type: Numpy array(2D)
+    Target vector for the testing data-set used to evaulate the model.
+X_missing: Type : Numpy array(3D)
+    Data for prediction of missing values. 
+missing_value_indices : Type: list
+    Indices of the missing values.
+y_pred : Type: numpy array(2D)
+    Predicted data. 
+y_test : Type: numpy array(2D)
+    Target data.
+mse : Type: float
+    Mean Squared Error between the prediction and the true values.
+y_missing : Type: numpy array (2D)
+    Predicted values of missing data.
 df_fin : Type : DataFrame
-  Imputed Data to 
-Note: The MSE calculated for the test dataset occurs after re-scaling of the features and is larger than the validation/training data.
-It's not necessarily an effect of over-fitting.
+    Imputed dataset.
+
+Note: The MSE calculated for the test dataset occurs after re-scaling of the features and is 
+larger than the validation/training data. It's not necessarily an effect of over-fitting.
 
 SG 2020/04/20
 
@@ -114,6 +141,7 @@ def main():
   print("Imputed missing data")
   print(df_fin.iloc[missing_indices].head())
   
+  #Saving the imputed data-set
   df_fin.to_csv("impute_household_power_consumption.csv")
 
 if __name__ == '__main__':
