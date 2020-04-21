@@ -10,11 +10,18 @@ The model is used to predict the missing data points.
 WHY: 
 Time series data sets can have missing data. An LSTM can be used to impute missing values with a prediction. 
 It is better than traditional methods like 1. interpolation, or 2. imputing with a constant (0 or mean) because
-the LSTM can 
-This code imputes and returns the complete data.  
+the LSTM can predict the missing data based on past information.
 
-ASSUMES: 
-The requirements file is included. 
+Long Short-Term Memory (LSTM) networks are a type of recurrent neural network capable of 
+learning order dependence in sequence prediction problems. 
+https://www.bioinf.jku.at/publications/older/2604.pdf
+
+This code imputes and returns the complete data. 
+
+ASSUMES:
+1. The input data is sequential and has uniform timesteps. There is enough data to train LSTM. 
+2. 
+3. The python libray requirements file is included. 
 
 FUTURE IMPROVEMENTS: 
 
@@ -25,13 +32,17 @@ The choice of parameters in the model was searched over a small grid. Extensive 
 
 
 VARIABLES: 
-df : Pandas dataframe with the entire data-set
-df_model : Pandas dataframe with the entire data-set with the features only
-utils : Utility functions included 
-scaler: Function to scale, and descale the features to improve modelling
-model : Keras based LSTM model with masking. 4 hidden layers and 2 fully connected layers
-10% of the data is used for cross-validation
-df_fin : Imputed Data
+df : Type: DataFrame
+  Dataframe with the entire raw data-set.
+df_model : Type: DataFrame
+  Pandas dataframe with the entire data-set with the selected features only.
+utils : Library of custom functions to preprocess, train and predict from the LSTM model.
+  Utility functions included. 
+scaler: Function from scikitlearn. 
+  Function to scale, and descale the features. The features are scaled between [0,1] to ensure the a smoother gradient
+  descent and hence improved convergence hence an improved model.
+df_fin : Type : DataFrame
+  Imputed Data to 
 Note: The MSE calculated for the test dataset occurs after re-scaling of the features and is larger than the validation/training data.
 It's not necessarily an effect of over-fitting.
 
