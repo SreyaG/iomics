@@ -49,8 +49,11 @@ import utils
 from sklearn.preprocessing import MinMaxScaler
 
 def main():
+  # read in arguments
   parser = argparse.ArgumentParser(description='File Path and/or Features')
+  # filepath argument
   parser.add_argument('path',metavar='path',type=str,help='the path to the dataset')
+  # optional argument features to use.
   parser.add_argument('--features',metavar='features', type=str, help='Features to impute')
   args = parser.parse_args()
   
@@ -86,14 +89,16 @@ def main():
   X_missing,missing_indices = utils.find_missing_indices(df_model.head())
   
   #fitting the LSTM
-  model = utils.fit_model(X_train,y_train)
+  n_timesteps, n_features, n_outputs = X_train.shape[1],X_train.shape[2], y_train.shape[1]
+  model = utils.lstm_imputer(n_timesteps, n_features,n_outputs)
+  model.fit(X_train,y_train)
   
   #Test set
-  y_pred = scaler.inverse_transform(utils.predict_model(model,X_test))
+  y_pred = scaler.inverse_transform(model.predict(X_test))
   mse = utils.evaluate(y_pred,scaler.inverse_transform(y_test))
   
   #Filling the missing data
-  y_missing = scaler.inverse_transform(utils.predict_model(model,X_missing))
+  y_missing = scaler.inverse_transform(model.predict(X_missing))
   df_fin=utils.filled_dataset(df,y_missing,missing_indices,cols)
   print("Imputed missing data")
   print(df_fin.iloc[missing_indices].head())
